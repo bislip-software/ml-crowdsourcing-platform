@@ -85,3 +85,5 @@ if (process.env.NODE_ENV !== "production") {
 
 // Sockets
 const io = require("./socket").init(server);
+
+module.exports = app;
