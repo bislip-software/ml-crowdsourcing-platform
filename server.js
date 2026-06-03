@@ -61,29 +61,27 @@ if (process.env.NODE_ENV === "production") {
 // Use routes
 app.use("/api", require("./routes"));
 
-// Set static folder
-app.use(express.static("./client/build"));
-// Always renders index.html
-app.get("*", (req, res) =>
-  res.sendFile(path.join(__dirname, "client", "build", "index.html")),
-);
-
 // Central error handling
 app.use(errorHandler);
 
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 5001;
-
-  const server = app.listen(
-    PORT,
-    console.log(
-      `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow
-        .bold,
-    ),
+if (process.env.NODE_ENV === "production") {
+  // Set static folder
+  app.use(express.static("./client/build"));
+  // Always renders index.html
+  app.get("*", (req, res) =>
+    res.sendFile(path.join(__dirname, "client", "build", "index.html")),
   );
 }
 
+const PORT = process.env.PORT || 5001;
+
+const server = app.listen(
+  PORT,
+  console.log(
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow
+      .bold,
+  ),
+);
+
 // Sockets
 const io = require("./socket").init(server);
-
-module.exports = app;

@@ -7,7 +7,7 @@
     "server": "nodemon server",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "vercel-build": "cd client && npm install && CI=false npm run build"
+    "build": "npm install --prefix client && npm run build --prefix client"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",
