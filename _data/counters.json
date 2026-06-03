@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "admin",
+    "seq": 0
+  },
+  {
+    "_id": "contributor",
+    "seq": 0
+  },
+  {
+    "_id": "dataset",
+    "seq": 0
+  },
+  {
+    "_id": "model",
+    "seq": 0
+  },
+  {
+    "_id": "task",
+    "seq": 0
+  }
+]

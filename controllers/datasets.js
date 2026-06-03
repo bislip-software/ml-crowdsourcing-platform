@@ -97,7 +97,7 @@ exports.exportDataset = asyncHandler(async (req, res, next) => {
   if (!dataset)
     return next(new ErrorResponse("This dataset does not exist", 404));
 
-  const dir = `files/temp`;
+  const dir = `/tmp`;
   const file1 = `${dir}/dataset.csv`;
   const file2 = `${dir}/dataset_training.csv`;
   const file3 = `${dir}/dataset_testing.csv`;

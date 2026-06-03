@@ -51,7 +51,7 @@ const Form = () => {
       setState({ dataForm: newForm, isValid: isFormValid(newForm) });
       setChanged(true);
     },
-    [dataForm]
+    [dataForm],
   );
 
   const updateAdmin = useCallback(() => {
@@ -82,7 +82,7 @@ const Form = () => {
               <Input
                 type="text"
                 name="degree"
-                defaultValue={degree.value}
+                defaultValue={degree.value ?? ""}
                 validation={degree.validation}
                 onBlur={onChange}
               />

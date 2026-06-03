@@ -7,7 +7,7 @@ const strInput = (value) => ({
 });
 
 export default Object.freeze({
-  username: strInput(""),
-  email: strInput(""),
-  password: strInput(""),
+  username: strInput("Javier Zabala 1"),
+  email: strInput("javier.zabala1@contributor.com"),
+  password: strInput("123456"),
 });

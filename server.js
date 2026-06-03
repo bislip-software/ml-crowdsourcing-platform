@@ -16,7 +16,9 @@ const errorHandler = require("./middlewares/error");
 const connectDB = require("./config/db");
 
 // Load env vars
-dotenv.config({ path: "./config/config.env" });
+dotenv.config({
+  path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV ?? "local"}`),
+});
 
 // Connect to database
 connectDB();
@@ -64,20 +66,21 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("./client/build"));
   // Always renders index.html
   app.get("*", (req, res) =>
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"))
+    res.sendFile(path.join(__dirname, "client", "build", "index.html")),
   );
 }
 
 // Central error handling
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 const server = app.listen(
   PORT,
   console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
-  )
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow
+      .bold,
+  ),
 );
 
 // Sockets

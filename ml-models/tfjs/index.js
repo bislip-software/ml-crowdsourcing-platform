@@ -1,7 +1,9 @@
-const tf = require("@tensorflow/tfjs-node");
+const tf = require("@tensorflow/tfjs");
 const fs = require("fs").promises;
 const os = require("os");
 const io = require("../../socket");
+
+const { saveModel, loadModel } = require("./utils");
 
 class Model {
   async buildModel({
@@ -23,14 +25,14 @@ class Model {
             inputShape: [inputShape], // Variable - Depends on how many features there are
             units: layer.units, // Variable
             activation: layer.activation, // Variable
-          })
+          }),
         );
       } else
         this._model.add(
           tf.layers[layer.class]({
             units: layer.units, // Variable
             activation: layer.activation, // Variable
-          })
+          }),
         );
     });
 
@@ -98,7 +100,7 @@ class Model {
           const values = Object.values(data);
           values.pop();
           return values.map((value) => value);
-        })
+        }),
       );
 
       // [[1, 0], [0, 1]]
@@ -111,7 +113,7 @@ class Model {
             if (Number.isNaN(last)) return label === last ? 1 : 0;
             else return index === last ? 1 : 0;
           });
-        })
+        }),
       );
 
       // Min-max scaling
@@ -173,23 +175,23 @@ class Model {
     this._model.layers[0].getWeights()[1].print();
 
     // Model should be saved in this line
-    await this._model.save(`file://${model.file}`);
+    await saveModel(this._model, model._id);
 
     return training;
   }
 
   // Testing
   async testModel(model) {
+    await this.buildModel(model);
     // Model should be loaded in this line
-    await tf.loadLayersModel(`file://${model.file}/model.json`);
+    this._model = await loadModel(model._id);
 
     const { dataset } = model;
 
     const discretizedData = this.discretizeData(dataset);
 
-    const { inputTensor, normalizationData } = this.convertData(
-      discretizedData
-    );
+    const { inputTensor, normalizationData } =
+      this.convertData(discretizedData);
 
     const { inputMax, inputMin, outputMax, outputMin } = normalizationData;
 

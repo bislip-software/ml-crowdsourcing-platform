@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const { mkdir } = require("fs").promises;
-const { rimraf } = require("../utils/files");
 const { generateId, updateActivities } = require("../utils/methods");
 const { createActivity } = require("../utils/dates");
 
@@ -126,9 +124,12 @@ const ModelSchema = new mongoose.Schema({
     },
   ],
 
-  file: {
-    type: String,
-    default: "",
+  modelTopology: {
+    type: Object,
+  },
+
+  modelWeights: {
+    type: Buffer,
   },
 
   createdAt: {
@@ -184,28 +185,16 @@ ModelSchema.post("save", async function (doc, next) {
   doc.id = await generateId("model");
   doc.trainedActivity = createActivity(5);
   doc.testedActivity = createActivity(5);
-  doc.file = `files/models/${doc._id}`;
-
-  // Creates dir
-  await mkdir(`files/models/${doc._id}`, { recursive: true });
 
   return await doc.save();
 });
 
 ModelSchema.post("findOneAndDelete", async function (doc, next) {
-  // Removes dir recursively
-  await rimraf(`files/models/${doc._id}`);
-
   // Update global stats
   const global = await Global.findOne({ id: "global" });
   await global.removeModel(doc._id);
 
   next();
-});
-
-ModelSchema.post("deleteMany", async function (doc, next) {
-  // Removes dir recursively
-  await rimraf(`files/models`);
 });
 
 module.exports = mongoose.model("Model", ModelSchema);

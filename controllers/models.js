@@ -100,7 +100,7 @@ exports.trainModel = asyncHandler(async (req, res, next) => {
 
   if (!buffer) return next(new ErrorResponse("No file was uploaded", 400));
 
-  const dir = `files/temp`;
+  const dir = `/tmp`;
 
   await mkdir(dir, { recursive: true });
 
@@ -141,7 +141,7 @@ exports.testModel = asyncHandler(async (req, res, next) => {
 
   if (!buffer) return next(new ErrorResponse("No file was uploaded", 400));
 
-  const dir = `files/temp`;
+  const dir = `/tmp`;
 
   await mkdir(dir, { recursive: true });
 
