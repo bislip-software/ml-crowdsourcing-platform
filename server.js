@@ -1,4 +1,4 @@
-require("./models")
+require("./models");
 const express = require("express");
 const cors = require("cors");
 const colors = require("colors");
@@ -61,35 +61,27 @@ if (process.env.NODE_ENV === "production") {
 // Use routes
 app.use("/api", require("./routes"));
 
-// Serve static assets if in production
-if (process.env.NODE_ENV === "production") {
-  // Set static folder
-  app.use(express.static("./client/build"));
-  // Always renders index.html
-  app.get("*", (req, res) =>
-    res.sendFile(path.join(__dirname, "client", "build", "index.html")),
-  );
-}
+// Set static folder
+app.use(express.static("./client/build"));
+// Always renders index.html
+app.get("*", (req, res) =>
+  res.sendFile(path.join(__dirname, "client", "build", "index.html")),
+);
 
 // Central error handling
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5001;
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5001;
 
-const server = app.listen(
-  PORT,
-  console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow
-      .bold,
-  ),
-);
+  const server = app.listen(
+    PORT,
+    console.log(
+      `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow
+        .bold,
+    ),
+  );
+}
 
 // Sockets
 const io = require("./socket").init(server);
-
-// Handle unhandled promise rejections
-process.on("unhandledRejection", (err, promise) => {
-  console.log(`Error: ${err.message}`.red);
-  // Close server & exit process
-  // server.close(() => process.exit(1));
-});
